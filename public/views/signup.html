@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+
+<body>  
+    
+    <div id="error-alert" class="alert alert-danger" style="display: none;"></div>
+
+	<div class="box">
+        <form onsubmit="signup(event)">
+			<h2>Sign Up Form</h2>
+
+      <div class="inputBox">
+				<input type="text" id="name" name="name" class="form-control" required>
+				<span>Name</span>
+				<i></i>
+			</div>
+
+			<div class="inputBox">
+				<input type="email" id="email" name="email" required>
+				<span>Email</span>
+				<i></i>
+			</div>
+
+			<div class="inputBox">
+				<input type="password" id="password" name="password" required>
+				<span>Password</span>
+				<i></i>
+			</div>
+      <br>
+			<div class="links">
+				<p id="msg">Existing User?  Then Login here<p>
+				<a href="/user/login">Login</a>
+			</div>
+			<input type="submit" value="Signup">
+		</form>
+	</div>
+  <p id="error-message"></p>       
+     
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js" integrity="sha512-b94Z6431JyXY14iSXwgzeZurHHRNkLt9d6bAHt7BZT38eqV+GyngIi/tVye4jBKPYQ2lBdRs0glww4fmpuLRwA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="../signup.js"></script>
+</body>
+</html>
