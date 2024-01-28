@@ -47,7 +47,7 @@ const forgotPassword = async (req, res) => {
           to: recievers,
           htmlContent: `
                         <h1>Kindly reset the password through below link...</h1>
-                        <a href="password/resetpassword/${id}">Reset password</a>
+                        <a href="${process.env.WEBSITE}/password/resetpassword/${id}">Reset password</a>
                     `,
         })        
           return res.status(200).json({
