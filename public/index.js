@@ -178,7 +178,7 @@ function showLeaderboard() {
         listItem.className =
           "list-group-item d-flex justify-content-between align-items-center";
           const nameSpan = document.createElement("span");
-      nameSpan.textContent = `Username:  ${userDetails.name} `;
+      nameSpan.textContent = `Username:  ${userDetails.name} Total Expense : ${userDetails.totalExpenses}`;
 
       // Create a span for the badge
       const badge = document.createElement("span");
