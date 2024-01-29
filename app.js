@@ -11,8 +11,7 @@ const  compression = require(`compression`)
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname,'acess.log'),{flag: 'a'})
 
-//app.use(helmet());
-app.use(compression());
+
 
 const userRoutes = require('./routes/user');
 const expenseRoutes = require('./routes/expense')
@@ -26,12 +25,15 @@ const Expense = require('./models/expense');
 const Order = require('./models/order')
 const  Forgotpassword = require('./models/forgotpassword')
 
-app.use(morgan('combined', {stream: accessLogStream}) );
+
 dotenv.config();              
 const app = express();
 app.use(cors());
 app.use(express.static('public'));
 app.use(express.json());
+//app.use(helmet());
+app.use(compression());
+app.use(morgan('combined', {stream: accessLogStream}) );
 
 // Use your user routes
 app.use('/',userRoutes)
