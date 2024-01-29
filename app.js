@@ -3,8 +3,14 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const sequelize = require('./util/database'); 
+const morgan = require('morgan');
+const helmet = require('helmet')
+const  compression = require(`compression`)
 
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'acess.log'),{flag: 'a'})
 
+//app.use(helmet());
+app.use(compression());
 
 const userRoutes = require('./routes/user');
 const expenseRoutes = require('./routes/expense')
@@ -18,7 +24,7 @@ const Expense = require('./models/expense');
 const Order = require('./models/order')
 const  Forgotpassword = require('./models/forgotpassword')
 
-
+app.use(morgan('combined', {stream: accessLogStream}) );
 dotenv.config();              
 const app = express();
 app.use(cors());
