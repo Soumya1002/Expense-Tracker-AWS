@@ -1,4 +1,3 @@
-//jenkins checking
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -35,7 +34,7 @@ app.use(express.json());
 app.use(compression());
 app.use(morgan('combined', {stream: accessLogStream}) );
 
-// Use your user routes
+
 app.use('/',userRoutes)
 app.use('/user', userRoutes);
 app.use('/expense',expenseRoutes)
