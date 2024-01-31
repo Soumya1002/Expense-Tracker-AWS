@@ -15,7 +15,7 @@ async function signup(e){
 
 
     } catch (error) {
-        document.getElementById('error-alert').innerText = error.message;
+        document.getElementById('error-alert').innerText ="SignUp Error..If username already exists then login";
         document.getElementById('error-alert').style.display = 'block';
     }
     e.target.reset();
