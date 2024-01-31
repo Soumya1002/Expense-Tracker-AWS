@@ -13,7 +13,7 @@ function login(e) {
             window.location.href = "/expense/index"
     }).catch(err => {
         console.log(JSON.stringify(err))
-        document.body.innerHTML += `<div style="color:red;">${err.message} <div>`;
+        alert("Error!! Invalid details");
     })
     e.target.reset();
 }
