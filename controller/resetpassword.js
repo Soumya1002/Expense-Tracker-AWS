@@ -30,7 +30,7 @@ const forgotPassword = async (req, res) => {
       apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
 
       const sender = {
-        email: "MoneyManiacexpense@gmail.com",
+        email: "SoumyaSenthil1002@gmail.com",
         name: "Expense Tracker - Admin",
       };
 
