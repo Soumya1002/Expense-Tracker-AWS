@@ -8,9 +8,6 @@ const morgan = require('morgan');
 const helmet = require('helmet')
 const  compression = require(`compression`)
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname,'acess.log'),{flag: 'a'})
-
-
 
 const userRoutes = require('./routes/user');
 const expenseRoutes = require('./routes/expense')
