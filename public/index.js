@@ -26,7 +26,7 @@ function addNewExpense(e){
 
 function showPremiumuserMessage() {
     document.getElementById('rzp-button1').style.visibility = "hidden"
-    document.getElementById('message').innerHTML = "You are a premium user "   
+    document.getElementById('message').innerHTML = "Premium User"   
     document.getElementById('downloadexpense').style.visibility = "visible"
 }
 
@@ -178,16 +178,11 @@ function showLeaderboard() {
         listItem.className =
           "list-group-item d-flex justify-content-between align-items-center";
           const nameSpan = document.createElement("span");
-      nameSpan.textContent = `Username:  ${userDetails.name} Total Expense : ${userDetails.totalExpenses}`;
+      nameSpan.textContent = `Username:  ${userDetails.name} || Total Expense : ${userDetails.totalExpenses}`;
 
       // Create a span for the badge
-      const badge = document.createElement("span");
-      badge.className = "badge badge-secondary";
-      //const totalExpense = parseInt(userDetails.totalExpenses) || 0;
-        badge.textContent = `Total Expense : ${userDetails.totalExpenses}`;
-      // console.log(parseInt(userDetails.total_expense) || 0);
+      
       listItem.appendChild(nameSpan);
-      listItem.appendChild(badge);
       leaderboardList.appendChild(listItem);
       
 
@@ -230,7 +225,7 @@ document.getElementById('rzp-button1').onclick = async function (e) {
          alert('You are a Premium User Now')
          document.getElementById('rzp-button1').style.visibility = "hidden"
          document.getElementById('downloadexpense').style.visibility = "visible"
-         document.getElementById('message').innerHTML = "You are a premium user "
+         document.getElementById('message').innerHTML = "Premium User"
          localStorage.setItem('token', res.data.token)
          showLeaderboard()
      },
