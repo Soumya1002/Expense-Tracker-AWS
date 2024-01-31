@@ -47,7 +47,7 @@ const forgotPassword = async (req, res) => {
           to: recievers,
           htmlContent: `
                         <h1>Kindly reset the password through below link...</h1>
-                        <a href="${process.env.WEBSITE}/password/resetpassword/${id}">Reset password</a>
+                        <a href="http://35.154.216.10/password/resetpassword/${id}">Reset password</a>
                     `,
         })        
           return res.status(200).json({
@@ -84,7 +84,7 @@ const resetPassword = async (req, res) => {
                                                 console.log('called')
                                     }
                                 </script>
-                                    <form action="${process.env.WEBSITE}/password/updatepassword/${id}" method="get" style="align-items: center;>
+                                    <form action="http://35.154.216.10/password/updatepassword/${id}" method="get" style="align-items: center;>
                                             <label for="newpassword" style="color: white;">Enter New password</label>
                                              <input name="newpassword" type="password" required></input>
                                              <button>reset password</button>
