@@ -127,11 +127,7 @@ const updatePassword = (req, res) => {
                     throw new Error(err);
                   }
                   user.update({ password: hash }).then(() => {
-                    res
-                      .status(201)
-                      .json({
-                        message: "Successfuly updated the new password",
-                      });
+                        res.redirect("/login");
                   });
                 });
               });
