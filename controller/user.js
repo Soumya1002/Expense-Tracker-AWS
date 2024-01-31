@@ -24,7 +24,7 @@ const signup = async (req, res) => {
     const { name, email, password } = req.body;
 
     if (isStringInvalid(name) || isStringInvalid(email) || isStringInvalid(password)) {
-      return res.status(400).json({ err: "Bad parameters. Something is missing" });
+      return res.status(400).json({ err: "Enter details properly" });
     }
 
     // Check if the email already exists
