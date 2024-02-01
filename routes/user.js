@@ -11,7 +11,9 @@ router.get('/signup',userController.signupPage)
 router.post('/signup', userController.signup)
 router.get('/login',userController.loginPage)
 router.post('/login',userController.login)
+router.get('/downloadURL', authenticationmiddleware.authenticate, expenseController.downloadURL)
 router.get('/download', authenticationmiddleware.authenticate,expenseController.downloadExpenses)
+
 
 
 module.exports = router;
