@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const sequelize = require('./util/database'); 
+// const helmet= require('helmet');
+ const morgan= require('morgan');
+ const fs= require('fs');
+ const path= require('path');
 
 const userRoutes = require('./routes/user');
 const expenseRoutes = require('./routes/expense')
@@ -44,6 +48,9 @@ Forgotpassword.belongsTo(User)
 
 User.hasMany(DownloadHistory)
 DownloadHistory.belongsTo(User)
+
+const accessLogStream= fs.createWriteStream(path.join(__dirname,'access.log'),{flags:'a'});
+ app.use(morgan('combined',{stream: accessLogStream}));
 
 sequelize.sync({ force: false })
   .then(() => {
