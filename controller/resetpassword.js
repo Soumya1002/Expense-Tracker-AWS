@@ -30,7 +30,7 @@ const forgotPassword = async (req, res) => {
       apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
 
       const sender = {
-        email: "SoumyaSenthil1002@gmail.com",
+        email: "MoneyManiacexpense@gmail.com",
         name: "Expense Tracker - Admin",
       };
 
@@ -47,7 +47,7 @@ const forgotPassword = async (req, res) => {
           to: recievers,
           htmlContent: `
                         <h1>Kindly reset the password through below link...</h1>
-                        <a href="http://35.154.216.10/password/resetpassword/${id}">Reset password</a>
+                        <a href="${process.env.WEBSITE}/password/resetpassword/${id}">Reset password</a>
                     `,
         })        
           return res.status(200).json({
@@ -84,7 +84,7 @@ const resetPassword = async (req, res) => {
                                                 console.log('called')
                                     }
                                 </script>
-                                    <form action="http://35.154.216.10/password/updatepassword/${id}" method="get" style="align-items: center;>
+                                    <form action="${process.env.WEBSITE}/password/updatepassword/${id}" method="get" style="align-items: center;>
                                             <label for="newpassword" style="color: white;">Enter New password</label>
                                              <input name="newpassword" type="password" required></input>
                                              <button>reset password</button>
@@ -111,9 +111,7 @@ const updatePassword = (req, res) => {
       (resetpasswordrequest) => {
         User.findOne({ where: { id: resetpasswordrequest.userId } }).then(
           (user) => {
-            // console.log('userDetails', user)
             if (user) {
-              //encrypt the password
               const saltRounds = 10;
               bcrypt.genSalt(saltRounds, function (err, salt) {
                 if (err) {
@@ -121,13 +119,13 @@ const updatePassword = (req, res) => {
                   throw new Error(err);
                 }
                 bcrypt.hash(newpassword, salt, function (err, hash) {
-                  // Store hash in your password DB.
                   if (err) {
                     console.log(err);
                     throw new Error(err);
                   }
                   user.update({ password: hash }).then(() => {
-                        res.redirect("/login");
+                    // Redirect to the login page
+                    res.redirect("/login"); // Adjust the URL according to your routing setup
                   });
                 });
               });
@@ -144,6 +142,9 @@ const updatePassword = (req, res) => {
     return res.status(403).json({ error, success: false });
   }
 };
+
+
+
 
 module.exports = {
   forgetPassPage,
