@@ -1,6 +1,7 @@
 const Expense = require('../models/expense');
+const DownloadHistory = require('../models/DownloadHistory');
 const User = require('../models/user'); 
-const sequelize = require('../util/database')
+const sequelize = require('../util/database');
 const AWS = require('aws-sdk')
 const dotenv = require("dotenv");
 dotenv.config();
@@ -29,9 +30,32 @@ const indexPage = async (req, res) => {
         return res.status(201).json({ expense, success: true });
     } catch(err) {
         await t.rollback()
-        return res.status(500).json({ success: false, error: err });
+        return res.status(500).json({ success: false, error: "ERROR!! Failed to add expense" });
     }
 }
+
+const  downloadExpenses = async (req, res) => {
+    try {
+           const expenses = await req.user.getExpenses();
+        const stringifiedExpenses = JSON.stringify(expenses);
+        const userId = req.user.id;
+        const filename = `Expense${userId}/${new Date()}.txt`;
+        const fileURL = await uploadToS3(stringifiedExpenses, filename);
+
+        await DownloadHistory.create({            
+            file_url: fileURL,
+            downloaded_at: new Date(),
+            userId: req.user.id
+        });
+
+        res.status(200).json({ fileURL, success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to download expenses.", success: false });
+    }
+};
+
+
 
 const getexpenses = async (req, res)=> {
     try {
@@ -67,23 +91,19 @@ const deleteExpense = async (req,res)=>{
    if(expenseid === undefined || expenseid.length ===0 ){
     return res.status(400).json({ success: false})
    }
-//    console.log(expenseid)
+
    try {
-    // Retrieve the expense amount before deleting
     const expense = await Expense.findByPk(expenseid);
     const expenseAmount = expense.expenseamount;
 
-    // Delete the expense
     const noOfRows = await Expense.destroy({ where: { id: expenseid, userId: req.user.id } });
 
     if (noOfRows === 0) {
         return res.status(404).json({ success: false, message: 'Expense doesn\'t belong to the user' });
     }
-
-    // Deduct the deleted expense amount from user's totalExpense
+  
     const updatedTotalExpense = Number(req.user.totalExpenses) - Number(expenseAmount);
-    
-    // Update the user's totalExpense
+
     await User.update({ totalExpenses: updatedTotalExpense }, { where: { id: req.user.id } });
 
     return res.status(200).json({ success: true, message: 'Deleted Successfully' });
@@ -91,6 +111,21 @@ const deleteExpense = async (req,res)=>{
    console.log(err)
    return res.status(403).json({ success: false, message: 'Failed'})
    }
+}
+
+const downloadURL = async (req, res) => {
+    try {
+        // Fetch download URLs for the current user
+        const userDownloadURLs = await DownloadHistory.findAll({
+            where: { userId: req.user.id }
+        });
+        console.log(userDownloadURLs);
+       
+        res.status(200).json( userDownloadURLs );
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch download URLs.", success: false });
+    }
 }
 
 function uploadToS3(data , filename){
@@ -115,33 +150,23 @@ function uploadToS3(data , filename){
                     reject(err)
                 }else{
                     console.log("success" , s3response)
-                   // return res.status(200).json({fileURL , succes: true})
                    resolve(s3response.Location)
                 }
             })
         })       
 }
 
-const downloadExpenses = async(req,res)=>{
-    //console.log(req)
-   try {
-   // console.log(req.user)
-      const expenses =await req.user.getExpenses()
-    //   console.log(expenses)
-    const stringifiedExpenses = JSON.stringify(expenses)
-    const userId= req.user.id;
-    const filename = `Expense${userId}/${new Date()}.txt`
-    const fileURL = await uploadToS3(stringifiedExpenses, filename)
-    res.status(200).json({ fileURL, success: true})
-   } catch(error){
-    console.log(error)
-   }
-}
+
+
+
+
 
 module.exports = {
+    
     indexPage,
     addexpense,
     getexpenses,
     deleteExpense,
-    downloadExpenses
+    downloadExpenses,
+    downloadURL
 }
