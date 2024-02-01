@@ -18,16 +18,19 @@ function addNewExpense(e){
     fetchAndDisplayExpenses(currentPage); 
 
     e.target.reset();
-
    
     }).catch(err => showError(err))  
     
 };
 
 function showPremiumuserMessage() {
+    
     document.getElementById('rzp-button1').style.visibility = "hidden"
     document.getElementById('message').innerHTML = "Premium User"   
     document.getElementById('downloadexpense').style.visibility = "visible"
+    document.getElementById('downloadurl').style.visibility = "visible"
+    
+  
 }
 
 function parseJwt (token) {
@@ -42,12 +45,12 @@ function parseJwt (token) {
 
 window.addEventListener('DOMContentLoaded', ()=>{
     const token  = localStorage.getItem('token')
-    const decodeToken = parseJwt(token)
-    // console.log(decodeToken)
+    const decodeToken = parseJwt(token)    
     const ispremiumuser = decodeToken.ispremiumuser
     if(ispremiumuser){
         showPremiumuserMessage()
         showLeaderboard()
+      
     }
     fetchAndDisplayExpenses(currentPage)
     document.getElementById('pagination').addEventListener('click', (e) => {
@@ -144,21 +147,18 @@ function deleteExpense(e, expenseid) {
 }
 
 function showError(err){
-    document.body.innerHTML += `<div style="color:red;"> ${err}</div>`
+    document.body.innerHTML += `<div style="color:red;"> Error!!!</div>`
 }
 var leaderboardElem = document.getElementById("leaderboard");
-//console.log(leaderboardElem);
 var leaderboardDisplayed = false;
 
-function showLeaderboard() {
-  
+function showLeaderboard() {  
   const inputElement = document.createElement("input");
   inputElement.type = "button";
   inputElement.id="leaderbutton";
   inputElement.value = "Show Leaderboard";
-  inputElement.className = "btn btn-primary"; // Bootstrap button classes
-   
-  
+  inputElement.className = "btn btn-primary"; 
+
   inputElement.onclick = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -166,7 +166,7 @@ function showLeaderboard() {
         "/premium/showLeaderBoard",
         { headers: { Authorization: token } }
       );
-      console.log(userLeaderBoardArray.data)
+      //console.log(userLeaderBoardArray.data)
 
       leaderboardElem.innerHTML = '<h1 class="mt-5">Leader Board</h1>';
 
@@ -178,18 +178,11 @@ function showLeaderboard() {
         listItem.className =
           "list-group-item d-flex justify-content-between align-items-center";
           const nameSpan = document.createElement("span");
-      nameSpan.textContent = `Username:  ${userDetails.name} || Total Expense : ${userDetails.totalExpenses}`;
-
-      // Create a span for the badge
-      
+      nameSpan.textContent = `Username:  ${userDetails.name} || Total Expense : ${userDetails.totalExpenses}`;      
       listItem.appendChild(nameSpan);
-      leaderboardList.appendChild(listItem);
-      
-
-      });
-      // console.log(leaderboardElem.innerHTML); 
-      leaderboardElem.appendChild(leaderboardList);
-     // leaderboardElem.style.display = "block"; 
+      leaderboardList.appendChild(listItem);     
+      });     
+      leaderboardElem.appendChild(leaderboardList);     
     } catch (error) {
       console.error(error);
     }
@@ -200,6 +193,15 @@ function showLeaderboard() {
     leaderboardDisplayed = true;
   }
 }
+
+
+
+
+  
+
+
+
+
 
 function removeExpensefromUI(expenseid){
     const expenseElemId = `expense-${expenseid}`;
@@ -225,9 +227,10 @@ document.getElementById('rzp-button1').onclick = async function (e) {
          alert('You are a Premium User Now')
          document.getElementById('rzp-button1').style.visibility = "hidden"
          document.getElementById('downloadexpense').style.visibility = "visible"
+               
          document.getElementById('message').innerHTML = "Premium User"
          localStorage.setItem('token', res.data.token)
-         showLeaderboard()
+         showLeaderboard()        
      },
   };
   const rzp1 = new Razorpay(options);
@@ -259,3 +262,49 @@ async function download(){
         alert(error)
     }  
 }
+
+
+var downloadUrlsElem = document.getElementById("history");
+
+
+
+document.getElementById('downloadurl').onclick = async function (e) {
+    console.log("in");
+    const token = localStorage.getItem("token");    
+    try {
+        const userDownloadUrlsArray = await axios.get(
+            "/user/downloadURL",
+            { headers: { Authorization: token } }
+        );
+        //console.log(userDownloadUrlsArray.downloaded_at);
+
+        downloadUrlsElem.innerHTML = '<h1 class="mt-5">Past Downloads</h1>';
+
+        const downloadUrlsList = document.createElement("ul");
+        downloadUrlsList.className = "list-group";
+
+        userDownloadUrlsArray.data.forEach((download) => {
+            const listItem = document.createElement("li");
+            listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+            
+            // Display downloaded date from the database
+            const downloadedDate =  download.downloaded_at.split("T")[0];
+            ;            
+            const dateSpan = document.createElement("span");
+            dateSpan.textContent = `Date: ${downloadedDate} |||` ;
+
+            // Display file URL
+            const urlAnchor = document.createElement("a");
+            urlAnchor.href = download.file_url;
+            urlAnchor.textContent = "Download Link";
+            urlAnchor.target = "_blank"; // Open link in a new tab
+            
+            listItem.appendChild(dateSpan);
+            listItem.appendChild(urlAnchor);
+            downloadUrlsList.appendChild(listItem);     
+        });     
+        downloadUrlsElem.appendChild(downloadUrlsList);     
+    } catch (error) {
+        //console.error(error);
+    }
+}; 
