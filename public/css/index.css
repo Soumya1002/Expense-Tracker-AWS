@@ -206,8 +206,8 @@ input[type="submit"]:active
 	border: none;
 }
 
-#downloadexpense{
-	background-color: #fff345;
+#downloadexpense, #downloadurl{
+	background-color: #f2df34;
 	color:#1c1c1c;
 	font-weight: bold;
 	text-align: center;
@@ -221,7 +221,7 @@ input[type="submit"]:active
     margin-left: 10px; /* Adjust this value to increase/decrease space */
 	float: right;
 
-	background-color: #fff345;
+	background-color: #f2df34;
 	color:#1c1c1c;
 	font-weight: bold;
 	text-align: center;
